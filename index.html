@@ -19,14 +19,14 @@
     /* ── Sticky global nav ── */
     .spa-navbar{position:sticky;top:0;z-index:100;background:var(--card);
       border-bottom:1px solid var(--brd);box-shadow:0 1px 4px rgba(1,15,49,.05)}
-    .spa-nav-inner{max-width:1080px;margin:0 auto;padding:11px 40px;
-      display:flex;align-items:center;gap:16px}
-    .spa-brand{font-family:'Outfit';font-weight:800;font-size:16px;color:var(--midnight);
-      white-space:nowrap;display:flex;align-items:center;gap:9px;letter-spacing:-.2px}
+    .spa-nav-inner{max-width:1080px;margin:0 auto;padding:11px 24px;
+      display:flex;align-items:center;gap:14px}
+    .spa-brand{font-family:'Outfit';font-weight:800;font-size:15px;color:var(--midnight);
+      white-space:nowrap;display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
     .spa-brand .dot{width:11px;height:11px;border-radius:50%;background:var(--logo);flex-shrink:0}
     .spa-links{display:flex;gap:2px;flex-wrap:wrap;flex:1;justify-content:flex-end}
-    .pn{font-family:'DM Sans';font-size:14px;font-weight:500;color:var(--t2);
-      text-decoration:none;padding:8px 14px;border-radius:100px;transition:all .2s;
+    .pn{font-family:'DM Sans';font-size:13px;font-weight:500;color:var(--t2);
+      text-decoration:none;padding:7px 8px;border-radius:100px;transition:all .2s;
       white-space:nowrap;position:relative;cursor:pointer;background:none;border:none}
     .pn:hover{color:var(--text);background:rgba(1,15,49,.04)}
     .pn.active{color:var(--midnight);font-weight:600;background:rgba(28,44,128,.09)}
@@ -65,23 +65,26 @@
   (function(){
     // Routable pages (hash key -> file). Add a new page here once and it's wired.
     var PAGES = {
+      home:       'home.html',
+      team:       'our_team.html',
       governance: 'ai_governance_process_poc.html',
       risk:       'risk_profile_reference.html',
       catalog:    'ai_solution_inventory_poc.html',
       inventory:  'ai_inventory_list_poc.html',
+      faqs:       'faqs.html',
       intake:     'ai-risk-value-calculator.html'
     };
-    // Nav order. key:null = placeholder (not built yet).
+    // Nav order.
     var NAV = [
-      {key:null,         label:'Home'},
-      {key:null,         label:'Our Team'},
+      {key:'home',       label:'Home'},
+      {key:'team',       label:'Our Team'},
       {key:'governance', label:'AI Governance Process'},
       {key:'risk',       label:'Risk Profile Reference'},
       {key:'catalog',    label:'AI Solution Catalog'},
       {key:'inventory',  label:'AI Inventory List'},
-      {key:null,         label:'FAQs'}
+      {key:'faqs',       label:'FAQs'}
     ];
-    var DEFAULT = 'governance';
+    var DEFAULT = 'home';
 
     var fileToKey = {};
     Object.keys(PAGES).forEach(function(k){ fileToKey[PAGES[k]] = k; });
@@ -134,13 +137,28 @@
       }
     });
 
-    // Auto-size the frame to its content (pages post their height)
     window.addEventListener('message', function(e){
       var d = e.data;
-      if(d && typeof d === 'object' &&
-         (d.type === 'spa-resize' || d.type === 'iframe-resize' || d.type === 'resize') &&
-         d.height){
+      if(!d || typeof d !== 'object') return;
+
+      // Auto-size the frame to its content (pages post their height)
+      if((d.type === 'spa-resize' || d.type === 'iframe-resize' || d.type === 'resize') && d.height){
         frame.style.height = Math.max(d.height, 200) + 'px';
+        return;
+      }
+
+      // An in-page link asked to navigate — drive the shell like the top nav
+      if(d.type === 'spa-navigate' && d.file){
+        var key = fileToKey[d.file];
+        if(key){
+          if(('#' + key) === location.hash){ window.scrollTo(0, 0); } // already here
+          else { location.hash = key; }                                // -> hashchange -> route()
+        } else {
+          // internal page not in the nav set: just load it in the frame
+          currentFile = d.file;
+          frame.src = d.file;
+          window.scrollTo(0, 0);
+        }
       }
     });
 
