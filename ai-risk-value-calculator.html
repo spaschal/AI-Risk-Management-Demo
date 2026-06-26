@@ -90,7 +90,7 @@
   .sbtn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--brd2);background:var(--card);font-family:'Outfit';font-weight:700;font-size:12.5px;color:var(--t2);cursor:pointer;transition:all .15s;position:relative;flex-shrink:0}
   .sbtn:hover{border-color:var(--indigo);color:var(--indigo)}
   .sbtn.sel{background:var(--indigo);border-color:var(--indigo);color:#fff}
-  .sbtn.vp::after{content:'!';position:absolute;top:-8px;right:-8px;font-size:6.5px;font-weight:800;background:var(--coral);color:#fff;padding:1px 3px;border-radius:4px}
+  .sbtn.vp::after{content:'!';position:absolute;top:-8px;right:-8px;font-size:10px;font-weight:800;background:var(--coral);color:#fff;padding:1px 3px;border-radius:4px}
   .sbtn.vp.sel{background:var(--coral);border-color:var(--coral)}
   .dim-desc{font-size:11px;color:var(--t3);margin-top:9px;line-height:1.4;flex-grow:1;display:flex;align-items:center;justify-content:center}
   .dim-desc.set{color:var(--text)}.dim-desc b{color:var(--text)}
@@ -245,8 +245,8 @@
         </div>
         <div class="notice" id="vpNotice" style="display:none"><span class="ic">&#9888;&#65039;</span><div><b>Leadership Approval Required.</b> Based on your risk profile, please provide the approver's name and upload approval documentation below.</div></div>
         <div class="grid2" id="vpFields" style="display:none">
-          <div class="fld"><label>Approver Name</label><input type="text" data-f="Approver Name" placeholder="Leadership approver"></div>
-          <div class="fld"><label>Leaderhsip Approval Document</label><div class="upload" onclick="return false"><div class="up-t">Drop your file here or browse</div><div class="up-s">PDF, MSG, EML, or image up to 25MB</div></div></div>
+          <div class="fld"><label>Approver Name</label><input type="text" data-f="Approver Name" placeholder="leadership approver"></div>
+          <div class="fld"><label>Leadership Approval Document</label><div class="upload" onclick="return false"><div class="up-t">Drop your file here or browse</div><div class="up-s">PDF, MSG, EML, or image up to 25MB</div></div></div>
         </div>
         <div class="err-msg" data-err>Please upload your ARB deck before continuing.</div>
         <div class="form-foot"><div class="foot-l"><button class="btn btn-o" data-back>&larr; Back</button></div><div class="foot-r"><button class="btn btn-g" data-clear>Clear</button><button class="btn btn-p" data-next>Continue &rarr;</button></div></div>
@@ -333,7 +333,7 @@
     else if(lvl.l==='Low') msg.innerHTML='<span class="rm-title">&#9989; Low Risk &mdash; standard controls apply</span>No additional governance engagement is required at this time. AI Governance will follow up to confirm.';
     else if(lvl.l==='Moderate') msg.innerHTML='<span class="rm-title">&#9888;&#65039; Moderate Risk &mdash; additional governance required</span>The Architecture Review Board will review this assessment; additional documentation or controls may be required.';
     else msg.innerHTML='<span class="rm-title">&#128721; High Risk &mdash; Architecture Review &amp; leadership approval required</span>A formal Architecture Review Board review and leadership-level approval are required before proceeding.';
-    // toggle VP fields in ARB step
+    // toggle leadership-approval fields in ARB step
     var showVP = anyVP || lvl.l==='High';
     document.getElementById('vpNotice').style.display = showVP?'flex':'none';
     document.getElementById('vpFields').style.display = showVP?'grid':'none';
